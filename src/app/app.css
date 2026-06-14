@@ -1,0 +1,11 @@
+#new_opp_modal {
+    width: 700px;
+    height: 400px;
+}
+
+#desc_area {
+    width: 400px;
+    height: 125px;
+    vertical-align: top; 
+    resize: vertical;
+}
