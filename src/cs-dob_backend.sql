@@ -139,7 +139,7 @@ ALTER TABLE `opportunities`
 -- Constraints for dumped tables
 --
 
---
+-- 
 -- Constraints for table `opp_location`
 --
 ALTER TABLE `opp_location`
