@@ -24,6 +24,16 @@ export class App {
 
   // Post Opportunity
   create_opp = signal<boolean>(false)
+
+  // Login
+  show_login = signal<boolean>(false)
+  show_create_account = signal<boolean>(false)
+  hidePassword = true;
+  hideNew = true;
+
+  // Show About Page
+  show_about = signal<boolean>(false)
+
   // new_opp = signal<Opportunity>({
   //   ID: 0,
   //   name: "",
@@ -48,9 +58,11 @@ export class App {
   })
 
   submitOpp() {
-    // console.log(this.new_opp())
-    this.oppService.postOpp(this.new_opp())
-    this.opportunityResource.reload()
+    this.oppService.postOpp(this.new_opp()).then(() => { 
+      this.opportunityResource.reload()
+    }).catch((error) => {
+      console.error('Error posting opportunity:', error);
+    });
   }
 
   toggleProfession(profession: string, isChecked: boolean) {

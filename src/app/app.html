@@ -1,58 +1,120 @@
-<h1>CS-DOB</h1>
-<h3>(Crowdsourced Skill Development Opportunities Board)</h3>
+<h1 class="center-title">CS-DOB</h1>
+<h3 class="center-title">(Crowdsourced Skill Development Opportunities Board)</h3>
 
-<button (click)="this.create_opp.set(true)">Add an opportunity</button> 
-
-<br/>
-
-<h3>Opportunities</h3>
-
-Specific Opportunity: <input />
-
-<details class="native-dropdown">
-  <summary>Major/Profession(s)</summary>
-  <div class="checkbox-group">
-    @for (profession of profList(); track profession) {
-      <label><input type="checkbox" name="lang" value="{{profession}}"> {{profession}}</label>
-    }
-  </div>
-</details>
-
-Location: <input />
-<button>Search</button>
-
-@if (create_opp()) {
-  <dialog id="new_opp_modal" [attr.open]="create_opp() ? '' : null" popover>
-    <h3>Post an Opportunity</h3>
-    Name: <input name="name" [(ngModel)]="new_opp().name" /> <br/>
-    Description: <textarea id="desc_area" [(ngModel)]="new_opp().description" ></textarea> <br/>
-    Link: <input name="link" [(ngModel)]="new_opp().link" /> <br/>
-    Location: <input name="location" [(ngModel)]="new_opp().location" /> <br/>
-    <details class="native-dropdown">
-      <summary>Major/Profession(s)</summary>
-      <div class="checkbox-group">
-        @for (profession of profList(); track profession) {
-        <label><input type="checkbox" name="prof" value="{{profession}}" #cb (click)="toggleProfession(profession, cb.checked)"> {{profession}}</label>
-        }
+<button id="user-box" (click)="show_login.set(!show_login())">Log In</button>
+@if (show_login()) {
+  <dialog id="login-dialog" [attr.open]="show_login() ? '' : null" popover>
+    <div id="vertical-element-container">
+      <h1>Login</h1>
+      <input placeholder="Username"/>
+      <div class="password-container">
+        <input [type]="hidePassword ? 'password' : 'text'" placeholder="Password"/>
+        <span class="toggle-icon" (click)="hidePassword = !hidePassword">
+          {{ hidePassword ? '👁️' : '🙈' }}
+        </span>
       </div>
-    </details>
-    Repeatable: <input type="checkbox" [(ngModel)]="new_opp().repeatable" /> <br/>
-    <br/>
-    <button (click)="submitOpp()">Submit</button>
-    <button (click)="this.create_opp.set(false)">Close</button>
+      <button> Log In </button>
+      <button (click)="show_create_account.set(true)"> Create Account </button>
+    </div>
   </dialog>
 }
 
-@for (opp of oppList(); track opp.ID) {
-  <div class="opp-card">
-    <h4>{{opp.name}}</h4>
-    <p>{{opp.description}}</p>
-    <a href="{{opp.link}}">Link</a>
-    <p>Location: {{opp.location.join(", ")}}</p>
-    @for (profession of opp.professions; track profession) {
-      {{profession}},
-    }
-    <p>Repeatable: {{opp.repeatable ? "Yes" : "No"}}</p>
-    <p>Posted by: {{opp.user}}</p>
+@if (show_create_account()) {
+  <dialog id="create-account" [attr.open]="show_create_account() ? '' : null" popover>
+    <h1>Create Account</h1>
+    <div id="vertical-element-container">
+      <input placeholder="New Username" />
+      <div class="password-container">
+        <input  [type]="hideNew ? 'password' : 'text'" placeholder="New Password" />
+        <span class="toggle-icon" (click)="hideNew = !hideNew">
+          {{ hideNew ? '👁️' : '🙈' }}
+        </span>
+      </div>
+      <button>Create Account</button>
+      <div id="cancel-link" (click)="show_create_account.set(false)">Cancel</div>
+    </div>
+  </dialog>
+}
+
+<div class="outer-bar">
+  <h3>Search Opportunities:</h3>
+
+  <div class="horizontal">
+    Specific Opportunity: <input />
+    <details class="native-dropdown bar-item">
+      <summary>Major/Profession(s)</summary>
+      <div class="checkbox-group">
+        @for (profession of profList(); track profession) {
+          <label><input type="checkbox" name="lang" value="{{profession}}"> {{profession}}</label> <br/>
+        }
+      </div>
+    </details>
+    Location: <input />
+    <button>Search</button>
+
+    <button id="About" (click)="show_about.set(true)">About</button>
   </div>
+
+  <br />
+
+  <button (click)="this.create_opp.set(true)">Add an opportunity</button>
+  <br />
+  <br />
+
+  <div class="main-body">
+    <h3>Opportunities:</h3>
+  
+    <div class="scroll-opportunities">
+      @for (opp of oppList(); track opp.ID) {
+      <div class="opp-card">
+        <h4>{{opp.name}}</h4>
+        <p>{{opp.description}}</p>
+        <a href="{{opp.link}}">Link</a>
+        <p>Location: {{opp.location.join(", ")}}</p>
+        @for (profession of opp.professions; track profession) {
+        {{profession}},
+        }
+        <p>Repeatable: {{opp.repeatable ? "Yes" : "No"}}</p>
+        <p>Posted by: {{opp.user}}</p>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+
+@if (create_opp()) {
+  <dialog id="new_opp_modal" [attr.open]="create_opp() ? '' : null" popover>
+    <div class="dialog-header">
+      <h3 id="opp-title">Post an Opportunity</h3>
+    </div>
+    <div id="opp-modal-body">
+      Name: <input name="name" [(ngModel)]="new_opp().name" /> <br/>
+      Description: <textarea id="desc_area" [(ngModel)]="new_opp().description" ></textarea> <br/>
+      Link: <input name="link" [(ngModel)]="new_opp().link" /> <br/>
+      Location: <input name="location" [(ngModel)]="new_opp().location" /> <br/>
+      <details class="native-dropdown" id="new-opp-dropdown">
+        <summary>Major/Profession(s)</summary>
+        <div class="checkbox-group">
+          @for (profession of profList(); track profession) {
+          <label><input type="checkbox" name="prof" value="{{profession}}" #cb (click)="toggleProfession(profession, cb.checked)"> {{profession}}</label>
+          }
+        </div>
+      </details>
+      Repeatable: <input type="checkbox" [(ngModel)]="new_opp().repeatable" /> <br/>
+      <br/>
+    </div>
+    <div class="dialog-footer">
+      <button (click)="submitOpp()">Submit</button>
+      <button (click)="this.create_opp.set(false)">Close</button>
+    </div>
+  </dialog>
+}
+
+@if (show_about()) {
+  <dialog id="about-modal" [attr.open]="show_about() ? '' : null" popover>
+    <h1> About: </h1>
+    <p> This board was created as a way for the community to come together and share the career and skill development opportunities they know that are open to the public, whether they are hackathons, CADathons, networking events, or any other career development event that everybody can view.</p>
+    <p> Hopefully everybody enjoys it and manages to find some good opportunities here, or share those they know with their peers! </p>
+    <button id="close-about-modal" (click)="show_about.set(false)">Close</button>
+  </dialog> 
 }

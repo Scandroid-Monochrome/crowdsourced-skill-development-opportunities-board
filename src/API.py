@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 # from google import genai
 
 from fastapi import FastAPI, HTTPException
@@ -46,16 +46,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-user = "root"
-password = ""
-
 def get_connection():
     # setup info
     return mysql.connector.connect(
-        host="localhost", 
-        user=user,
-        password=password,
-        database="cs-dob_backend"
+        host=os.getenv("CURR_MACH"), 
+        user=os.getenv("DB_USERNAME"),
+        password=os.getenv("DB_PASSWORD"),
+        database=os.getenv("DB_NAME")
     )
 
 @app.get("/opportunities")
@@ -141,11 +138,11 @@ def get_professions():
         cursor=conn.cursor(dictionary=True)
         cursor.execute("SELECT * FROM professions")
         rows=cursor.fetchall()
-        print(rows)
+        # print(rows)
 
         professions = []
         for row in rows:
-            print(row["Profession_Name"])
+            # print(row["Profession_Name"])
             professions.append(row["Profession_Name"])
         # print(ids)
 
